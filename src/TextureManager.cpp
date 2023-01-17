@@ -2,6 +2,10 @@
 
 #include "TextureManager.h"
 
+TextureManager* TextureManager::s_pInstance = NULL;
+
+TextureManager::TextureManager() {}
+
 bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer) {
     SDL_Surface* pTempSureFace = IMG_Load(fileName.c_str());
     if(pTempSureFace == NULL) {

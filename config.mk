@@ -15,8 +15,8 @@ SRCEXT = cpp
 CC = g++
 
 # Dependency libraries
-LIBS = -lSDL2
-
+LIBS = -lSDL2 -lSDL2_image
+ 
 # Defines the language standards for GCC
 # STD = -std=c11 
 

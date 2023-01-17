@@ -1,6 +1,6 @@
 #include "Game.h"
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_surface.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -20,7 +20,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         return false;
     }
 
-    SDL_Surface* mTempSureFace = SDL_LoadBMP("assets/animate.bmp");
+    SDL_Surface* mTempSureFace = IMG_Load("assets/animate-alpha.png");
     m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, mTempSureFace);
     SDL_FreeSurface(mTempSureFace);
 
@@ -33,6 +33,8 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     m_destinationRectangle.h = m_sourceRectangle.h;
     m_destinationRectangle.x = 0;
     m_destinationRectangle.y = 0;
+
+    SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
 
     m_bRunning = true;
 
@@ -58,7 +60,7 @@ void Game::render() {
     SDL_RenderClear(m_pRenderer);
 
     SDL_RenderCopy(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle);
-    SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle, 0, 0, SDL_FLIP_HORIZONTAL);
+    SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle, 0, 0, SDL_FLIP_NONE);
 
     SDL_RenderPresent(m_pRenderer);
 }

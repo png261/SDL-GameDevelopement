@@ -23,6 +23,7 @@ class Game {
         void update();
         void handleEvents();
         void clean();
+        void quit() { m_bRunning = false; };
         SDL_Renderer* getRenderer() { return m_pRenderer; };
         bool running() { return m_bRunning; }
     private:

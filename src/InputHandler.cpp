@@ -174,7 +174,7 @@ void InputHandler::update()
         switch (event.type)
         {
             case SDL_QUIT:
-                TheGame::Instance()->quit();
+                Game::Instance()->quit();
                 break;
                 
             case SDL_JOYAXISMOTION:

@@ -1,6 +1,8 @@
-#include "Game.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
+#include "Game.h"
+#include "InputHandler.h"
 
 Game* Game::s_pInstance = NULL;
 
@@ -33,14 +35,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 }
 
 void Game::handleEvents() {
-    SDL_Event event;
-    while(SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                m_bRunning = false;
-                break;
-        }
-    }
+    InputHandler::Instance()->update();
 } 
 
 void Game::update() {

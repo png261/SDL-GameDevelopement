@@ -2,9 +2,12 @@
 #define GAME_H
 
 #include <SDL2/SDL.h>
+#include <vector>
+
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class Game {
     public:
@@ -22,15 +25,13 @@ class Game {
         SDL_Window* m_pWindow;
         SDL_Renderer* m_pRenderer;
 
-        SDL_Texture* m_pTexture;
-        SDL_Rect m_sourceRectangle;
-        SDL_Rect m_destinationRectangle;
-
-        int m_currentFrame;
         bool m_bRunning;
 
-        GameObject m_go;
-        Player m_player;
+        GameObject* m_go;
+        GameObject* m_player;
+        GameObject* m_enemy;
+
+        std::vector<GameObject*> m_gameObjects;
 };
 
 #endif

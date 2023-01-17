@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+Game* Game::s_pInstance = NULL;
+
 bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         SDL_Log("SDL init fail");
@@ -22,20 +24,9 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     TextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer);
 
-    m_go = new GameObject();
-    m_player = new Player();
-    m_enemy = new Enemy();
+    m_gameObjects.push_back(new Player(new LoaderParams(100, 100, 128, 82, "animate")));
+    m_gameObjects.push_back(new Enemy(new LoaderParams(300, 300, 128, 82, "animate")));
 
-    m_go->load(100, 100, 128, 82, "animate");
-    m_player->load(300, 300, 128, 82, "animate");
-    m_enemy->load(0, 0, 128, 82, "animate");
-    SDL_Log("test");
-
-
-    m_gameObjects.push_back(m_go);
-    m_gameObjects.push_back(m_player);
-    m_gameObjects.push_back(m_enemy);
-    
     m_bRunning = true;
 
     return true;
@@ -62,7 +53,7 @@ void Game::render() {
     SDL_RenderClear(m_pRenderer);
 
     for (auto& object : m_gameObjects) {
-        object->draw(m_pRenderer);
+        object->draw();
     }
 
     SDL_RenderPresent(m_pRenderer);

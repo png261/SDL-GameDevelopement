@@ -13,10 +13,10 @@ class PlayState : public GameState {
         virtual bool onEnter();
         virtual bool onExit();
 
-        virtual std::string getStateID() const { return s_playID; }
+        virtual std::string getStateID() const { return s_stateID; }
 
     private:
-        static const std::string s_playID;
+        static const std::string s_stateID;
         std::vector<GameObject*> m_gameObjects;
 };
 

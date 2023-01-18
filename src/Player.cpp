@@ -1,6 +1,8 @@
 #include "Player.h"
+#include "Game.h"
 #include "GameObject.h"
 #include "InputHandler.h"
+#include "PauseState.h"
 
 Player::Player(const LoaderParams* pParams) : SDLGameObject(pParams) {
 

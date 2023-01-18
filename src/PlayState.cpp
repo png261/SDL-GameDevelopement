@@ -1,8 +1,10 @@
 #include "PlayState.h"
 #include "TextureManager.h"
+#include "InputHandler.h"
+#include "PauseState.h"
 #include "Game.h"
 
-const std::string PlayState::s_playID = "PLAY";
+const std::string PlayState::s_stateID = "PLAY";
 
 bool PlayState::onEnter() {
     if(!TextureManager::Instance()->load("assets/helicopter.png", "helicopter", Game::Instance()->getRenderer())) {
@@ -15,6 +17,10 @@ bool PlayState::onEnter() {
 
 
 void PlayState::update() {
+    if(InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE))
+    {
+        Game::Instance()->getStateMachine()->pushState(new PauseState());
+    }
     for(auto &object : m_gameObjects) {
         object->update();
     }
@@ -31,6 +37,7 @@ bool PlayState::onExit() {
         object->clean();
         TextureManager::Instance()->clearFromTextureMap(object->getTextureID());
     }
+    InputHandler::Instance()->reset();
     m_gameObjects.clear();
 
     return true;

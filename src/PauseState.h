@@ -1,10 +1,10 @@
-#ifndef MENU_STATE_H
-#define MENU_STATE_H
+#ifndef PAUSE_STATE_H
+#define PAUSE_STATE_H
 #include "GameState.h"
 #include "GameObject.h"
 #include <vector>
 
-class MenuState : public GameState {
+class PauseState : public GameState {
     public:
         virtual void update();
         virtual void render();
@@ -15,8 +15,8 @@ class MenuState : public GameState {
         virtual std::string getStateID() const { return s_stateID; }
     private:
         static const std::string s_stateID;
-        static void s_menuToPlay();
-        static void s_exitFromMenu();
+        static void s_pauseToMain();
+        static void s_resumePlay();
         std::vector<GameObject*> m_gameObjects;
 };
 

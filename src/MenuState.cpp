@@ -1,11 +1,12 @@
 #include "MenuState.h"
 #include "MenuButton.h"
 #include "PlayState.h"
+#include "InputHandler.h"
 #include "TextureManager.h"
 #include "Game.h"
 #include <iostream>
 
-const std::string MenuState::s_menuID = "Menu";
+const std::string MenuState::s_stateID = "MENU";
 
 bool MenuState::onEnter() {
     std::cout << "entering menustate" << std::endl;
@@ -39,13 +40,14 @@ bool MenuState::onExit() {
         object->clean();
         TextureManager::Instance()->clearFromTextureMap(object->getTextureID());
     }
+    InputHandler::Instance()->reset();
     m_gameObjects.clear();
 
     return true;
 }
 
 void MenuState::s_menuToPlay() {
-    Game::Instance()->getGameStateMachine()->changeState(new PlayState());
+    Game::Instance()->getStateMachine()->changeState(new PlayState());
 }
 
 void MenuState::s_exitFromMenu() {

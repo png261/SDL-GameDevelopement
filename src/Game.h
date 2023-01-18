@@ -27,6 +27,9 @@ class Game {
         void quit() { m_bRunning = false; };
         SDL_Renderer* getRenderer() { return m_pRenderer; };
         bool running() { return m_bRunning; }
+        GameStateMachine* getGameStateMachine() {
+            return m_pGameStateMachine;
+        }
     private:
         Game(){};
         ~Game() {};

@@ -1,5 +1,6 @@
 #include "MenuState.h"
 #include "MenuButton.h"
+#include "PlayState.h"
 #include "TextureManager.h"
 #include "Game.h"
 #include <iostream>
@@ -16,8 +17,8 @@ bool MenuState::onEnter() {
         return false;
     }
     
-    m_gameObjects.push_back(new MenuButton(new LoaderParams(100, 100, 400, 100, "playbutton")));
-    m_gameObjects.push_back(new MenuButton(new LoaderParams(100, 300, 400, 100, "exitbutton")));
+    m_gameObjects.push_back(new MenuButton(new LoaderParams(100, 100, 400, 100, "playbutton"), s_menuToPlay));
+    m_gameObjects.push_back(new MenuButton(new LoaderParams(100, 300, 400, 100, "exitbutton"), s_exitFromMenu));
     return true;
 }
 
@@ -41,4 +42,12 @@ bool MenuState::onExit() {
     m_gameObjects.clear();
 
     return true;
+}
+
+void MenuState::s_menuToPlay() {
+    Game::Instance()->getGameStateMachine()->changeState(new PlayState());
+}
+
+void MenuState::s_exitFromMenu() {
+    Game::Instance()->quit();
 }

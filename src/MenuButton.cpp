@@ -2,7 +2,8 @@
 #include "InputHandler.h"
 #include <SDL2/SDL.h>
 
-MenuButton::MenuButton(const LoaderParams* pParams) : SDLGameObject(pParams)
+MenuButton::MenuButton(const LoaderParams* pParams, void (*callback)()) 
+    : SDLGameObject(pParams), m_callback(callback)
 {
     m_currentFrame = MOUSE_OUT;
 }
@@ -23,8 +24,11 @@ void MenuButton::update() {
         m_currentFrame = MOUSE_OVER;
         if(InputHandler::Instance()->getMouseButtonState(LEFT)) {
             m_currentFrame = CLICKED;
+            m_callback();
+            m_bReleased = false;
         }
     } else {
+        m_bReleased = true;
         m_currentFrame = MOUSE_OUT;
     }
 }

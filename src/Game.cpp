@@ -3,6 +3,8 @@
 
 #include "Game.h"
 #include "InputHandler.h"
+#include "MenuState.h"
+#include "PlayState.h"
 
 Game* Game::s_pInstance = NULL;
 
@@ -24,6 +26,9 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         return false;
     }
 
+    m_pGameStateMachine = new GameStateMachine();
+    m_pGameStateMachine->changeState(new MenuState());
+
     TextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer);
 
     m_gameObjects.push_back(new Player(new LoaderParams(100, 100, 128, 82, "animate")));
@@ -36,20 +41,19 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
 void Game::handleEvents() {
     InputHandler::Instance()->update();
+    if(InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RETURN)) {
+        m_pGameStateMachine->changeState(new PlayState());
+    }
 } 
 
 void Game::update() {
-    for (auto& object : m_gameObjects) {
-        object->update();
-    }
+    m_pGameStateMachine->update();
 }
 
 void Game::render() {
     SDL_RenderClear(m_pRenderer);
 
-    for (auto& object : m_gameObjects) {
-        object->draw();
-    }
+    m_pGameStateMachine->render();
 
     SDL_RenderPresent(m_pRenderer);
 }

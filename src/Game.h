@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 
+#include "GameStateMachine.h"
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "Player.h"
@@ -30,6 +31,7 @@ class Game {
         Game(){};
         ~Game() {};
         static Game* s_pInstance;
+        GameStateMachine* m_pGameStateMachine;
         SDL_Window* m_pWindow;
         SDL_Renderer* m_pRenderer;
 

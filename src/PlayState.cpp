@@ -1,21 +1,37 @@
 #include "PlayState.h"
-#include <iostream>
+#include "TextureManager.h"
+#include "Game.h"
 
 const std::string PlayState::s_playID = "PLAY";
 
-void PlayState::update() {
-}
-
-void PlayState::render() {
-
-}
-
 bool PlayState::onEnter() {
-    std::cout << "entering PlayState" << std::endl;
+    if(!TextureManager::Instance()->load("assets/helicopter.png", "helicopter", Game::Instance()->getRenderer())) {
+        return false;
+    }
+
+    m_gameObjects.push_back(new Player(new LoaderParams(100, 100, 128, 55, "helicopter")));
     return true;
 }
 
+
+void PlayState::update() {
+    for(auto &object : m_gameObjects) {
+        object->update();
+    }
+}
+
+void PlayState::render() {
+    for(auto &object : m_gameObjects) {
+        object->draw();
+    }
+}
+
 bool PlayState::onExit() {
-    std::cout << "exiting PlayState" << std::endl;
+    for(auto &object : m_gameObjects) {
+        object->clean();
+        TextureManager::Instance()->clearFromTextureMap(object->getTextureID());
+    }
+    m_gameObjects.clear();
+
     return true;
 }

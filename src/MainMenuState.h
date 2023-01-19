@@ -1,10 +1,11 @@
-#ifndef PAUSE_STATE_H
-#define PAUSE_STATE_H
+#ifndef MAIN_MENU_STATE_H
+#define MAIN_MENU_STATE_H
+
 #include "MenuState.h"
 #include "GameObject.h"
 #include <vector>
 
-class PauseState : public MenuState {
+class MainMenuState : public MenuState {
     public:
         virtual void update();
         virtual void render();
@@ -18,8 +19,8 @@ class PauseState : public MenuState {
         std::vector<GameObject*> m_gameObjects;
         virtual void setCallbacks(const std::vector<Callback>& callbacks);
 
-        static void s_pauseToMain();
-        static void s_resumePlay();
+        static void s_menuToPlay();
+        static void s_exitFromMenu();
 };
 
 #endif

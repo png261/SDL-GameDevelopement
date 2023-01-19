@@ -30,7 +30,7 @@ LIBS = -lSDL2 -lSDL2_image
 # CFLAGS = -O3 $(STD) $(STACK) $(WARNS)
 
 # Debug options
-# DEBUG = -g3 -DDEBUG=1
+DEBUG = -g3 -DDEBUG=1
 
 # paths
 PROJECT_PATH = $(PWD)

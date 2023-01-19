@@ -4,37 +4,32 @@
 #include "PauseState.h"
 #include "GameOverState.h"
 #include "Game.h"
+#include "GameStateMachine.h"
+#include "StateParser.h"
+#include <iostream>
 
 const std::string PlayState::s_stateID = "PLAY";
 
 bool PlayState::onEnter() {
-    if(!TextureManager::Instance()->load("assets/helicopter.png", "helicopter", Game::Instance()->getRenderer())) {
+    StateParser stateParser;
+    if(!stateParser.parseState("test.xml", s_stateID, &m_gameObjects, &m_textureIDList)) {
         return false;
     }
 
-    if(!TextureManager::Instance()->load("assets/helicopter2.png", "helicopter2", Game::Instance()->getRenderer())) {
-        return false;
-    }
-
-    m_gameObjects.push_back(new Player(new LoaderParams(500, 100, 128, 55, "helicopter")));
-    m_gameObjects.push_back(new Enemy(new LoaderParams(100, 100, 128, 55, "helicopter2", 5)));
     return true;
 }
 
 
 void PlayState::update() {
-    if(InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE))
-    {
-        Game::Instance()->getStateMachine()->pushState(new PauseState());
+    if(checkCollision(dynamic_cast<SDLGameObject*>(m_gameObjects[0]), dynamic_cast<SDLGameObject*>(m_gameObjects[1]))) {
+        GameStateMachine::Instance()->pushState(new GameOverState());
     }
+    if(InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+        GameStateMachine::Instance()->pushState(new PauseState());
+    }
+
     for(auto &object : m_gameObjects) {
         object->update();
-    }
-    if(checkCollision(dynamic_cast<SDLGameObject*>
-                (m_gameObjects[0]), dynamic_cast<SDLGameObject*>
-                (m_gameObjects[1])))
-    {
-        Game::Instance()->getStateMachine()->pushState(new GameOverState());
     }
 }
 
@@ -47,7 +42,10 @@ void PlayState::render() {
 bool PlayState::onExit() {
     for(auto &object : m_gameObjects) {
         object->clean();
-        TextureManager::Instance()->clearFromTextureMap(object->getTextureID());
+    }
+
+    for(auto& texture : m_textureIDList) {
+        TextureManager::Instance()->clearFromTextureMap(texture);
     }
     InputHandler::Instance()->reset();
     m_gameObjects.clear();

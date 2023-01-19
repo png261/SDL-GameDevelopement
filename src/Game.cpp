@@ -2,19 +2,27 @@
 #include <SDL2/SDL_image.h>
 
 #include "Game.h"
+#include "AnimatedGraphic.h"
+#include "GameOverState.h"
 #include "InputHandler.h"
-#include "MenuState.h"
+#include "MainMenuState.h"
 #include "PlayState.h"
+#include "PauseState.h"
+#include "MenuButton.h"
+#include "GameStateMachine.h"
+#include "TextureManager.h"
+#include "Player.h"
+#include "Enemy.h"
 
 Game* Game::s_pInstance = NULL;
 
-bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
+bool Game::init(const char *title, int x, int y, int width, int height, bool fullscreen) {
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         SDL_Log("SDL init fail");
         return false;
     }
 
-    m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+    m_pWindow = SDL_CreateWindow(title, x, y, width, height, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
     if(m_pWindow == NULL) {
         SDL_Log("Window init fail");
         return false;
@@ -26,39 +34,39 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         return false;
     }
 
-    m_pGameStateMachine = new GameStateMachine();
-    m_pGameStateMachine->changeState(new MenuState());
+    GameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
+    GameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
+    GameObjectFactory::Instance()->registerType("Enemy", new EnemyCreator());
+    GameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 
-    TextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer);
-
-    m_gameObjects.push_back(new Player(new LoaderParams(100, 100, 128, 82, "animate")));
-    m_gameObjects.push_back(new Enemy(new LoaderParams(300, 300, 128, 82, "animate")));
+    GameStateMachine::Instance()->changeState(new MainMenuState());
 
     m_bRunning = true;
-
     return true;
 }
 
 void Game::handleEvents() {
     InputHandler::Instance()->update();
-    if(InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RETURN)) {
-        m_pGameStateMachine->changeState(new PlayState());
-    }
 } 
 
 void Game::update() {
-    m_pGameStateMachine->update();
+    GameStateMachine::Instance()->update();
 }
 
 void Game::render() {
     SDL_RenderClear(m_pRenderer);
 
-    m_pGameStateMachine->render();
+    GameStateMachine::Instance()->render();
 
     SDL_RenderPresent(m_pRenderer);
 }
 
 void Game::clean() {
+    GameStateMachine::Instance()->clean();
+
+    InputHandler::Instance()->clean();
+    TextureManager::Instance()->clean();
+
     SDL_DestroyWindow(m_pWindow);
     SDL_DestroyRenderer(m_pRenderer);
     SDL_Quit();

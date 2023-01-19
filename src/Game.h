@@ -2,13 +2,7 @@
 #define GAME_H
 
 #include <SDL2/SDL.h>
-#include <vector>
-
 #include "GameStateMachine.h"
-#include "TextureManager.h"
-#include "GameObject.h"
-#include "Player.h"
-#include "Enemy.h"
 
 class Game {
     public:
@@ -24,23 +18,25 @@ class Game {
         void update();
         void handleEvents();
         void clean();
-        void quit() { m_bRunning = false; };
-        SDL_Renderer* getRenderer() { return m_pRenderer; };
-        bool running() { return m_bRunning; }
-        GameStateMachine* getStateMachine() {
-            return m_pGameStateMachine;
+        void quit() {
+            m_bRunning = false; 
+        };
+        SDL_Renderer* getRenderer() {
+            return m_pRenderer; 
+        };
+
+        bool running() { 
+            return m_bRunning; 
         }
     private:
         Game(){};
         ~Game() {};
+
         static Game* s_pInstance;
-        GameStateMachine* m_pGameStateMachine;
+
         SDL_Window* m_pWindow;
         SDL_Renderer* m_pRenderer;
-
         bool m_bRunning;
-
-        std::vector<GameObject*> m_gameObjects;
 };
 
 #endif

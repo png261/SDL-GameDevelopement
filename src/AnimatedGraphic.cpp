@@ -1,10 +1,13 @@
 #include "AnimatedGraphic.h"
 #include "InputHandler.h"
 #include <SDL2/SDL.h>
+#include <iostream>
 
-AnimatedGraphic::AnimatedGraphic(const LoaderParams* pParams, int animSpeed) 
-    : SDLGameObject(pParams), m_animSpeed(animSpeed)
-{
+AnimatedGraphic::AnimatedGraphic() : SDLGameObject() {
+}
+
+void AnimatedGraphic::load(const LoaderParams* pParams) {
+    SDLGameObject::load(pParams);
 }
 
 void AnimatedGraphic::draw() {
@@ -12,7 +15,9 @@ void AnimatedGraphic::draw() {
 }
 
 void AnimatedGraphic::update() {
-    m_currentFrame = int(((SDL_GetTicks() / (1000 / m_animSpeed)) % m_numFrames));
+    if(m_numFrames > 0) {
+        m_currentFrame =  int(((SDL_GetTicks() / (1000 / std::min(m_animSpeed, 1)) % m_numFrames)));
+    }
 }
 
 void AnimatedGraphic::clean() {

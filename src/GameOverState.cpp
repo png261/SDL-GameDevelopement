@@ -1,41 +1,40 @@
+
 #include "GameOverState.h"
-#include "AnimatedGraphic.h"
+#include "MainMenuState.h"
 #include "MenuButton.h"
 #include "MenuState.h"
 #include "PlayState.h"
-#include "InputHandler.h"
+#include "StateParser.h"
 #include "TextureManager.h"
+#include "InputHandler.h"
 #include "Game.h"
+#include "GameStateMachine.h"
 #include <iostream>
 
 const std::string GameOverState::s_stateID = "GAMEOVER";
 
 bool GameOverState::onEnter() {
-    SDL_Log("Game OVer");
-    if(!TextureManager::Instance()->load("assets/gameover.png",
-                "gameovertext", Game::Instance()->getRenderer()))
-    {
+    StateParser stateParser;
+    if(!stateParser.parseState("test.xml", s_stateID, &m_gameObjects, &m_textureIDList)) {
         return false;
     }
-    if(!TextureManager::Instance()->load("assets/main.png",
-                "mainbutton", Game::Instance()->getRenderer()))
-    {
-        return false;
-    }
-    if(!TextureManager::Instance()->load("assets/restart.png",
-                "restartbutton", Game::Instance()->getRenderer()))
-    {
-        return false;
-    }
-    
-    GameObject* gameOverText = new AnimatedGraphic(new LoaderParams(200, 100, 190, 30, "gameovertext", 2), 2);
-    GameObject* button1 = new MenuButton(new LoaderParams(200, 200, 200, 80, "mainbutton"), s_gameOverToMain);
-    GameObject* button2 = new MenuButton(new LoaderParams(200, 300, 200, 80, "restartbutton"), s_restartPlay);
 
-    m_gameObjects.push_back(gameOverText);
-    m_gameObjects.push_back(button1);
-    m_gameObjects.push_back(button2);
+    m_callbacks.push_back(0);
+    m_callbacks.push_back(s_gameOverToMain);
+    m_callbacks.push_back(s_restartPlay);
+
+    setCallbacks(m_callbacks);
     return true;
+}
+
+void GameOverState::setCallbacks(const std::vector<Callback> &callbacks) {
+    for(auto& object : m_gameObjects) {
+        if(dynamic_cast<MenuButton*>(object))
+        {
+            MenuButton* pButton = dynamic_cast<MenuButton*>(object);
+            pButton->setCallback(callbacks[pButton->getCallbackID()]);
+        }
+    }
 }
 
 void GameOverState::update() {
@@ -53,18 +52,23 @@ void GameOverState::render() {
 bool GameOverState::onExit() {
     for(auto &object : m_gameObjects) {
         object->clean();
-        TextureManager::Instance()->clearFromTextureMap(object->getTextureID());
     }
-    InputHandler::Instance()->reset();
     m_gameObjects.clear();
+
+    for(auto& texture : m_textureIDList) {
+        TextureManager::Instance()->clearFromTextureMap(texture);
+    }
+
+    InputHandler::Instance()->reset();
 
     return true;
 }
 
 void GameOverState::s_gameOverToMain() {
-    Game::Instance()->getStateMachine()->changeState(new MenuState());
+    GameStateMachine::Instance()->changeState(new MainMenuState());
 }
 
 void GameOverState::s_restartPlay() {
-    Game::Instance()->getStateMachine()->changeState(new PlayState());
+    GameStateMachine::Instance()->changeState(new PlayState());
 }
+

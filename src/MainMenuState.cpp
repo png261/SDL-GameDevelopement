@@ -1,5 +1,5 @@
 
-#include "PauseState.h"
+#include "MainMenuState.h"
 #include "MainMenuState.h"
 #include "MenuButton.h"
 #include "MenuState.h"
@@ -11,23 +11,23 @@
 #include "GameStateMachine.h"
 #include <iostream>
 
-const std::string PauseState::s_stateID = "PAUSE";
+const std::string MainMenuState::s_stateID = "MENU";
 
-bool PauseState::onEnter() {
+bool MainMenuState::onEnter() {
     StateParser stateParser;
     if(!stateParser.parseState("test.xml", s_stateID, &m_gameObjects, &m_textureIDList)) {
         return false;
     }
 
     m_callbacks.push_back(0);
-    m_callbacks.push_back(s_pauseToMain);
-    m_callbacks.push_back(s_resumePlay);
+    m_callbacks.push_back(s_menuToPlay);
+    m_callbacks.push_back(s_exitFromMenu);
 
     setCallbacks(m_callbacks);
     return true;
 }
 
-void PauseState::setCallbacks(const std::vector<Callback> &callbacks) {
+void MainMenuState::setCallbacks(const std::vector<Callback> &callbacks) {
     for(auto& object : m_gameObjects) {
         if(dynamic_cast<MenuButton*>(object))
         {
@@ -37,19 +37,19 @@ void PauseState::setCallbacks(const std::vector<Callback> &callbacks) {
     }
 }
 
-void PauseState::update() {
+void MainMenuState::update() {
     for(auto &object : m_gameObjects) {
         object->update();
     }
 }
 
-void PauseState::render() {
+void MainMenuState::render() {
     for(auto &object : m_gameObjects) {
         object->draw();
     }
 }
 
-bool PauseState::onExit() {
+bool MainMenuState::onExit() {
     for(auto &object : m_gameObjects) {
         object->clean();
     }
@@ -64,10 +64,11 @@ bool PauseState::onExit() {
     return true;
 }
 
-void PauseState::s_pauseToMain() {
-    GameStateMachine::Instance()->changeState(new MainMenuState());
+void MainMenuState::s_menuToPlay() {
+    GameStateMachine::Instance()->changeState(new PlayState());
 }
 
-void PauseState::s_resumePlay() {
-    GameStateMachine::Instance()->popState();
+void MainMenuState::s_exitFromMenu() {
+    Game::Instance()->quit();
 }
+

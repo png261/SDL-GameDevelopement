@@ -1,4 +1,3 @@
-
 #include "PauseState.h"
 #include "MainMenuState.h"
 #include "MenuButton.h"

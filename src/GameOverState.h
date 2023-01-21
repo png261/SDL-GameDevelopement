@@ -1,6 +1,5 @@
 #ifndef GAMEOVER_STATE_H
 #define GAMEOVER_STATE_H
-
 #include "MenuState.h"
 #include "GameObject.h"
 #include <vector>

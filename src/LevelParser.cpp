@@ -5,8 +5,6 @@
 #include "Game.h"
 #include "TileLayer.h"
 
-#include <cstddef>
-
 using namespace tinyxml2;
 
 Level* LevelParser::parseLevel(const char *levelFile) {
@@ -37,11 +35,11 @@ Level* LevelParser::parseLevel(const char *levelFile) {
 
 void LevelParser::parseTilesets(tinyxml2::XMLElement *pTilesetRoot, std::vector<Tileset> *pTilesets) {
     XMLDocument tilesetDocument;
-    tilesetDocument.LoadFile(pTilesetRoot->Attribute("source"));
+    tilesetDocument.LoadFile((std::string("assets/") + pTilesetRoot->Attribute("source")).c_str());
 
     XMLElement *pTilesetEl = tilesetDocument.RootElement();
     XMLElement *pImagieEl = pTilesetEl->FirstChildElement(); 
-    TextureManager::Instance()->load(pImagieEl->Attribute("source"), pTilesetEl->Attribute("name"), Game::Instance()->getRenderer());
+    TextureManager::Instance()->load((std::string("assets/") + pImagieEl->Attribute("source")), pTilesetEl->Attribute("name"), Game::Instance()->getRenderer());
 
     Tileset tileset;
     tileset.firstGridID = atoi(pTilesetRoot->Attribute("firstgid"));

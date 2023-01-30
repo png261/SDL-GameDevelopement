@@ -25,10 +25,8 @@ void PlayState::update() {
     if(InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
         GameStateMachine::Instance()->pushState(new PauseState());
     }
+    pLevel->update();
 
-    for(auto &object : m_gameObjects) {
-        object->update();
-    }
 }
 
 void PlayState::render() {

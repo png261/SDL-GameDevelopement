@@ -11,6 +11,7 @@ TileLayer::TileLayer(int tileSize, const std::vector<Tileset> &tilesets)
 }
 
 void TileLayer::update() {
+    m_velocity.setX(0.01);
     m_position += m_velocity;
 }
 
@@ -25,7 +26,7 @@ void TileLayer::render() {
 
     for(int i = 0; i < m_numRows; i++) {
         for(int j = 0; j < m_numColumns; j++) {
-            int id = m_tileIDs[i][j + x];
+            int id = m_tileIDs[i + y][j + x];
             if(id == 0) {
                 continue;
             }

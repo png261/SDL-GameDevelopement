@@ -42,6 +42,9 @@ bool Game::init(const char *title, int x, int y, int width, int height, bool ful
     GameStateMachine::Instance()->changeState(new MainMenuState());
 
     m_bRunning = true;
+    m_gameWidth = width;
+    m_gameHeight = height;
+
     return true;
 }
 

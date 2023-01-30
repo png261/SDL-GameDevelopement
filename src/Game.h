@@ -20,10 +20,19 @@ class Game {
         void clean();
         void quit() {
             m_bRunning = false; 
-        };
+        }
+        
         SDL_Renderer* getRenderer() {
             return m_pRenderer; 
-        };
+        }
+
+        int getGameWidth() {
+            return m_gameWidth;
+        }
+
+        int getGameHeight() {
+            return m_gameHeight;
+        }
 
         bool running() { 
             return m_bRunning; 
@@ -37,6 +46,8 @@ class Game {
         SDL_Window* m_pWindow;
         SDL_Renderer* m_pRenderer;
         bool m_bRunning;
+        int m_gameWidth;
+        int m_gameHeight;
 };
 
 #endif

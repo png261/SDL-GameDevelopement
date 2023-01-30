@@ -1,7 +1,6 @@
 #include "AnimatedGraphic.h"
 #include "InputHandler.h"
 #include <SDL2/SDL.h>
-#include <iostream>
 
 AnimatedGraphic::AnimatedGraphic() : SDLGameObject() {
 }

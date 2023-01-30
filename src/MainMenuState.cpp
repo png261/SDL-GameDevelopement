@@ -9,7 +9,6 @@
 #include "InputHandler.h"
 #include "Game.h"
 #include "GameStateMachine.h"
-#include <iostream>
 
 const std::string MainMenuState::s_stateID = "MENU";
 

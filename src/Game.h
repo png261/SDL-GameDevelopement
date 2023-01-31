@@ -1,55 +1,44 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <SDL2/SDL.h>
 #include "GameStateMachine.h"
+#include <SDL2/SDL.h>
 
 class Game {
-    public:
-        static Game* Instance() {
-            if(s_pInstance == NULL) {
-                s_pInstance = new Game();
-            }
-            return s_pInstance;
-        };
-
-        bool init(const char *title, int x, int y, int w, int h, bool fullscreen);
-        void render();
-        void update();
-        void handleEvents();
-        void clean();
-        void quit() {
-            m_bRunning = false; 
+  public:
+    static Game *Instance() {
+        if (s_pInstance == NULL) {
+            s_pInstance = new Game();
         }
-        
-        SDL_Renderer* getRenderer() {
-            return m_pRenderer; 
-        }
+        return s_pInstance;
+    };
 
-        int getGameWidth() {
-            return m_gameWidth;
-        }
+    bool init(const char *title, int x, int y, int w, int h, bool fullscreen);
+    void render();
+    void update();
+    void handleEvents();
+    void clean();
+    void quit() { m_bRunning = false; }
 
-        int getGameHeight() {
-            return m_gameHeight;
-        }
+    SDL_Renderer *getRenderer() { return m_pRenderer; }
 
-        bool running() { 
-            return m_bRunning; 
-        }
-    private:
-        Game(){};
-        ~Game() {};
+    int getGameWidth() { return m_gameWidth; }
 
-        static Game* s_pInstance;
+    int getGameHeight() { return m_gameHeight; }
 
-        SDL_Window* m_pWindow;
-        SDL_Renderer* m_pRenderer;
-        bool m_bRunning;
-        int m_gameWidth;
-        int m_gameHeight;
+    bool running() { return m_bRunning; }
+
+  private:
+    Game(){};
+    ~Game(){};
+
+    static Game *s_pInstance;
+
+    SDL_Window *m_pWindow;
+    SDL_Renderer *m_pRenderer;
+    bool m_bRunning;
+    int m_gameWidth;
+    int m_gameHeight;
 };
 
 #endif
-
-

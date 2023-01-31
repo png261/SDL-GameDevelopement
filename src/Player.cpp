@@ -5,16 +5,11 @@
 #include "PauseState.h"
 #include <iostream>
 
-Player::Player() : SDLGameObject() {
-}
+Player::Player() : SDLGameObject() {}
 
-void Player::load(const LoaderParams* pParams) {
-    SDLGameObject::load(pParams);
-}
+void Player::load(const LoaderParams *pParams) { SDLGameObject::load(pParams); }
 
-void Player::draw() {
-    SDLGameObject::draw();
-}
+void Player::draw() { SDLGameObject::draw(); }
 
 void Player::update() {
     handleInput();
@@ -22,12 +17,10 @@ void Player::update() {
 }
 
 void Player::handleInput() {
-    Vector2D* target = InputHandler::Instance() ->getMousePosition();
+    Vector2D *target = InputHandler::Instance()->getMousePosition();
 
     m_velocity = *target - m_position;
     m_velocity /= 10000;
 }
 
-void Player::clean(){
-    SDLGameObject::clean();
-}
+void Player::clean() { SDLGameObject::clean(); }

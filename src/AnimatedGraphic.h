@@ -5,20 +5,16 @@
 #include "SDLGameObject.h"
 
 class AnimatedGraphic : public SDLGameObject {
-    public:
-        AnimatedGraphic();
-        virtual void load(const LoaderParams* pParams);
-        virtual void draw();
-        virtual void update();
-        virtual void clean();
+  public:
+    AnimatedGraphic();
+    virtual void load(const LoaderParams *pParams);
+    virtual void draw();
+    virtual void update();
+    virtual void clean();
 };
 
-class AnimatedGraphicCreator: public BaseCreator {
-    GameObject* createGameObject() const {
-        return new AnimatedGraphic();
-    }
+class AnimatedGraphicCreator : public BaseCreator {
+    GameObject *createGameObject() const { return new AnimatedGraphic(); }
 };
-
-
 
 #endif

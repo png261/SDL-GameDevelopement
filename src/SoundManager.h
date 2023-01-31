@@ -1,9 +1,9 @@
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
+#include <SDL2/SDL_mixer.h>
 #include <map>
 #include <string>
-#include <SDL2/SDL_mixer.h>
 
 enum sound_type {
     SOUND_MUSIC = 0,
@@ -11,25 +11,26 @@ enum sound_type {
 };
 
 class SoundManager {
-    public:
-        static SoundManager *Instance() {
-            if(s_pInstance == NULL) {
-                s_pInstance = new SoundManager(); 
-            }
-            return s_pInstance;
+  public:
+    static SoundManager *Instance() {
+        if (s_pInstance == NULL) {
+            s_pInstance = new SoundManager();
         }
-        bool load(std::string fileName, std::string id, sound_type type);
-        void playSound(std::string id, int loop);
-        void playMusic(std::string id, int loop);
-    private:
-        static SoundManager *s_pInstance;
-        std::map<std::string, Mix_Chunk*> m_sfxs;
-        std::map<std::string, Mix_Music*> m_music;
+        return s_pInstance;
+    }
+    bool load(std::string fileName, std::string id, sound_type type);
+    void playSound(std::string id, int loop);
+    void playMusic(std::string id, int loop);
 
-        SoundManager();
-        ~SoundManager();
-        SoundManager(const SoundManager&);
-        SoundManager &operator=(const SoundManager&);
+  private:
+    static SoundManager *s_pInstance;
+    std::map<std::string, Mix_Chunk *> m_sfxs;
+    std::map<std::string, Mix_Music *> m_music;
+
+    SoundManager();
+    ~SoundManager();
+    SoundManager(const SoundManager &);
+    SoundManager &operator=(const SoundManager &);
 };
 
 #endif

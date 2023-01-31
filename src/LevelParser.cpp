@@ -4,6 +4,8 @@
 #include "TextureManager.h"
 #include "Game.h"
 #include "TileLayer.h"
+#include "ObjectLayer.h"
+#include "GameObjectFactory.h"
 
 using namespace tinyxml2;
 
@@ -19,14 +21,28 @@ Level* LevelParser::parseLevel(const char *levelFile) {
     m_height = atoi(pRoot->Attribute("height"));
 
     for(XMLElement * e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+        if(e->Value() == std::string("properties")) {
+            for(XMLElement * pPropertyElement = e->FirstChildElement(); pPropertyElement != NULL; pPropertyElement = pPropertyElement->NextSiblingElement()) {
+                if(pPropertyElement->Value() == std::string("property")) {
+                    parseTextures(pPropertyElement);
+                }
+            }
+        }
+    }
+
+    for(XMLElement * e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
         if(e->Value() == std::string("tileset")) {
             parseTilesets(e, pLevel->getTilesets());
         }
     }
 
     for(XMLElement * e = pRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
-        if(e->Value() == std::string("layer")) {
-            parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets());
+        if(e->Value() == std::string("objectgroup") || e->Value() == std::string("layer") ) {
+            if(e->FirstChildElement()->Value() == std::string("object")) {
+                parseObjectLayer(e, pLevel->getLayers());
+            } else if (e->FirstChildElement()->Value() == std::string("data")) {
+                parseTileLayer(e, pLevel->getLayers(), pLevel->getTilesets());
+            } 
         }
     }
 
@@ -87,4 +103,61 @@ void LevelParser::parseTileLayer(tinyxml2::XMLElement *pTileElement, std::vector
 
     pTileLayer->setTileIDs(data);
     pLayers->push_back(pTileLayer);
+}
+
+void LevelParser::parseTextures(XMLElement *pTextureRoot) {
+    TextureManager::Instance()->load(std::string("assets/") + pTextureRoot->Attribute("value"), pTextureRoot->Attribute("name"),Game::Instance()->getRenderer());
+}
+
+GameObject *parseObject(XMLElement *pObjectElement) {
+        GameObject *pGameObject = GameObjectFactory::Instance()->create(pObjectElement->Attribute("class"));
+
+        int x, y, width, height, numFrames, callbackID, animSpeed;
+        std::string textureID;
+
+        x = atoi(pObjectElement->Attribute("x"));
+        y = atoi(pObjectElement->Attribute("y"));
+
+        for(XMLElement *e = pObjectElement->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if(e->Value() == std::string("properties")) {
+                for(XMLElement *property = e->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
+                    if(property->Value() == std::string("property")) {
+                        std::string propertyName =  property->Attribute("name");
+                        std::string propertyValue =  property->Attribute("value");
+
+                        if(propertyName == "textureWidth") {
+                            width = stoi(propertyValue);
+                        }
+                        else if(propertyName == "textureHeight") {
+                            height = stoi(propertyValue);
+                        }
+                        else if(propertyName == "numFrames") {
+                            numFrames = stoi(propertyValue);
+                        }
+                        else if(propertyName == "callbackID") {
+                            callbackID = stoi(propertyValue);
+                        }
+                        else if(propertyName == "textureID") {
+                            textureID = propertyValue;
+                        }
+                        else if(propertyName == "animSpeed") {
+                            animSpeed = stoi(propertyValue);
+                        }
+                    }
+                }
+            }
+        }
+        
+        pGameObject->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
+        return pGameObject;
+}
+
+void LevelParser::parseObjectLayer(XMLElement *pObjectLayerElement, std::vector<Layer*> *pLayers) {
+    ObjectLayer *pObjectLayer = new ObjectLayer();
+
+    for(XMLElement *pObjectElement = pObjectLayerElement->FirstChildElement(); pObjectElement != NULL; pObjectElement = pObjectElement->NextSiblingElement()) {
+        pObjectLayer->getGameObjects()->push_back(parseObject(pObjectElement));
+    }
+
+    pLayers->push_back(pObjectLayer);
 }

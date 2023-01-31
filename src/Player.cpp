@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "InputHandler.h"
 #include "PauseState.h"
+#include <iostream>
 
 Player::Player() : SDLGameObject() {
 }

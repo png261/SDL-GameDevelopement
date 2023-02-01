@@ -46,4 +46,9 @@ class GameObjectFactory {
     std::map<std::string, BaseCreator *> m_creators;
 };
 
+template<class T>
+class Creator : public BaseCreator {
+    GameObject *createGameObject() const { return new T(); }
+};
+
 #endif

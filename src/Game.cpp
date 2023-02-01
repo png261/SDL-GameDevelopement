@@ -37,11 +37,12 @@ bool Game::init(const char *title, int x, int y, int width, int height,
     }
 
     GameObjectFactory::Instance()->registerType("MenuButton",
-                                                new MenuButtonCreator());
-    GameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
-    GameObjectFactory::Instance()->registerType("Enemy", new EnemyCreator());
+                                                new Creator<MenuButton>());
+    GameObjectFactory::Instance()->registerType("Player",
+                                                new Creator<Player>());
+    GameObjectFactory::Instance()->registerType("Enemy", new Creator<Enemy>());
     GameObjectFactory::Instance()->registerType("AnimatedGraphic",
-                                                new AnimatedGraphicCreator());
+                                                new Creator<AnimatedGraphic>());
 
     GameStateMachine::Instance()->changeState(new MainMenuState());
 

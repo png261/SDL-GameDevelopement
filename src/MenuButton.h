@@ -20,10 +20,6 @@ class MenuButton : public SDLGameObject {
     void (*m_callback)();
 };
 
-class MenuButtonCreator : public BaseCreator {
-    GameObject *createGameObject() const { return new MenuButton(); }
-};
-
 enum button_state {
     MOUSE_OUT = 0,
     MOUSE_OVER = 1,

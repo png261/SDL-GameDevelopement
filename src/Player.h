@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "GameObjectFactory.h"
 #include "SDLGameObject.h"
 
 class Player : public SDLGameObject {
@@ -12,10 +11,6 @@ class Player : public SDLGameObject {
     virtual void clean();
     virtual void handleInput();
     Player();
-};
-
-class PlayerCreator : public BaseCreator {
-    GameObject *createGameObject() const { return new Player(); }
 };
 
 #endif

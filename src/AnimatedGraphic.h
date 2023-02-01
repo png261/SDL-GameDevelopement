@@ -13,8 +13,4 @@ class AnimatedGraphic : public SDLGameObject {
     virtual void clean();
 };
 
-class AnimatedGraphicCreator : public BaseCreator {
-    GameObject *createGameObject() const { return new AnimatedGraphic(); }
-};
-
 #endif

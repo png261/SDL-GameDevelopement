@@ -7,9 +7,7 @@
 class Game {
   public:
     static Game *Instance() {
-        if (s_pInstance == NULL) {
-            s_pInstance = new Game();
-        }
+        static Game *s_pInstance = new Game();
         return s_pInstance;
     };
 
@@ -31,8 +29,6 @@ class Game {
   private:
     Game(){};
     ~Game(){};
-
-    static Game *s_pInstance;
 
     SDL_Window *m_pWindow;
     SDL_Renderer *m_pRenderer;

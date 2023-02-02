@@ -14,8 +14,6 @@
 #include "Player.h"
 #include "TextureManager.h"
 
-Game *Game::s_pInstance = NULL;
-
 bool Game::init(const char *title, int x, int y, int width, int height,
                 bool fullscreen) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

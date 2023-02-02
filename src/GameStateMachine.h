@@ -7,9 +7,7 @@
 class GameStateMachine {
   public:
     static GameStateMachine *Instance() {
-        if (s_pInstance == NULL) {
-            s_pInstance = new GameStateMachine();
-        }
+        static GameStateMachine *s_pInstance = new GameStateMachine();
         return s_pInstance;
     }
     void pushState(GameState *pState);
@@ -23,7 +21,6 @@ class GameStateMachine {
   private:
     GameStateMachine(){};
     std::vector<GameState *> m_gameStates;
-    static GameStateMachine *s_pInstance;
 };
 
 #endif

@@ -14,9 +14,7 @@ class BaseCreator {
 class GameObjectFactory {
   public:
     static GameObjectFactory *Instance() {
-        if (s_pInstance == NULL) {
-            s_pInstance = new GameObjectFactory();
-        }
+        static GameObjectFactory *s_pInstance = new GameObjectFactory();
         return s_pInstance;
     }
 
@@ -42,7 +40,6 @@ class GameObjectFactory {
 
   private:
     GameObjectFactory(){};
-    static GameObjectFactory *s_pInstance;
     std::map<std::string, BaseCreator *> m_creators;
 };
 

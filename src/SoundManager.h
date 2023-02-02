@@ -13,9 +13,7 @@ enum sound_type {
 class SoundManager {
   public:
     static SoundManager *Instance() {
-        if (s_pInstance == NULL) {
-            s_pInstance = new SoundManager();
-        }
+        static SoundManager *s_pInstance = new SoundManager();
         return s_pInstance;
     }
     bool load(std::string fileName, std::string id, sound_type type);
@@ -23,7 +21,6 @@ class SoundManager {
     void playMusic(std::string id, int loop);
 
   private:
-    static SoundManager *s_pInstance;
     std::map<std::string, Mix_Chunk *> m_sfxs;
     std::map<std::string, Mix_Music *> m_music;
 

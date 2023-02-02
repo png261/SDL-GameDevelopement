@@ -20,7 +20,7 @@ void Player::handleInput() {
     Vector2D *target = InputHandler::Instance()->getMousePosition();
 
     m_velocity = *target - m_position;
-    m_velocity /= 10000;
+    m_velocity /= 100;
 }
 
 void Player::clean() { SDLGameObject::clean(); }

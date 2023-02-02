@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
     }
 
     while (Game::Instance()->running()) {
+        frameStart = SDL_GetTicks();
+
         Game::Instance()->handleEvents();
         Game::Instance()->update();
         Game::Instance()->render();
